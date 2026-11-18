@@ -5,3 +5,4 @@ netlify/functions/.netlify/
 !.env.example
 .DS_Store
 *.log
+.netlify/
