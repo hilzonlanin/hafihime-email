@@ -1,0 +1,21 @@
+{
+  "name": "hafihime-email",
+  "version": "1.0.0",
+  "description": "Centralized email sending service for hafihime web apps via Netlify Functions",
+  "type": "module",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@netlify/functions": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.4.5"
+  }
+}
