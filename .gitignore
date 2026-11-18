@@ -1,6 +1,5 @@
 node_modules/
 netlify/functions/.netlify/
-public/
 .env
 .env.*
 !.env.example
