@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Hafihime</title>
-    <meta name="description" content="Transactional email service for Hafihime web apps. Server-to-server only." />
-    <link rel="icon" href="favicon.ico" />
+    <meta name="description" content="Hafihime Email Service." />
+    <link rel="icon" href="favicon.ico?v=2" />
     <style>
-      :root { color-scheme: dark; }
+      :root { color-scheme: light; }
       * { box-sizing: border-box; }
       html, body { height: 100%; }
       body {
@@ -19,73 +19,91 @@
         gap: 1.25rem;
         padding: 2rem 1.5rem;
         font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
-        background: radial-gradient(ellipse at 50% 35%, #161b22 0%, #0d1117 70%);
-        color: #c9d1d9;
+        background: #ffffff;
+        color: #000000;
         text-align: center;
       }
-      .logo { width: 96px; height: 96px; }
+      .logo { width: 104px; height: 104px; }
       h1 {
         margin: 0;
-        font-size: 2.4rem;
-        font-weight: 650;
-        letter-spacing: 0.01em;
-        color: #f0f6fc;
+        font-size: clamp(2.2rem, 8vw, 3rem);
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        /* letter-spacing adds a trailing space that throws off centering —
+           indenting by the same amount puts the word back on axis. */
+        text-indent: 0.18em;
+        color: #000000;
       }
       .service {
-        margin: -0.5rem 0 0;
-        font-size: 1.05rem;
-        color: #e32228;
-        font-weight: 500;
-        letter-spacing: 0.04em;
+        margin: 0;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
+        color: #000000;
       }
-      .tagline { margin: 0; max-width: 34rem; color: #8b949e; }
-      .endpoint {
-        margin: 0.5rem 0 0;
-        font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
-        color: #8b949e;
-      }
-      .endpoint code { color: #3fb950; }
+      /* Live status: the dot only turns green when this page's own probe of
+         the function answers (401 = the function ran and refused us for lacking
+         a token — proof of life). No answer / CDN 5xx / network failure = red. */
       .status {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        margin-top: 0.25rem;
-        font-size: 0.85rem;
-        color: #8b949e;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #000000;
       }
-      .status::before {
-        content: "";
-        width: 8px;
-        height: 8px;
+      .status .dot {
+        width: 9px;
+        height: 9px;
         border-radius: 50%;
-        background: #3fb950;
-        box-shadow: 0 0 8px #3fb95088;
+        background: #9aa0a6;
       }
-      footer {
-        position: fixed;
-        bottom: 0;
-        padding: 1rem;
-        font-size: 0.8rem;
-        color: #484f58;
-      }
-      footer a { color: #8b949e; text-decoration: none; }
-      footer a:hover { color: #c9d1d9; text-decoration: underline; }
+      .status.up .dot { background: #16a34a; box-shadow: 0 0 6px #16a34a88; }
+      .status.down .dot { background: #dc2626; box-shadow: 0 0 6px #dc262688; }
     </style>
   </head>
   <body>
-    <img class="logo" src="hafihime-logo.svg" alt="Hafihime logo" width="96" height="96" />
-    <h1>Hafihime</h1>
+    <img class="logo" src="hafihime-logo.svg" alt="Hafihime logo" width="104" height="104" />
+    <h1>HAFIHIME</h1>
     <p class="service">Email Service</p>
-    <p class="tagline">
-      Transactional email for Hafihime web apps — welcome, password reset,
-      purchase confirmation and contact replies — behind one authenticated endpoint.
-    </p>
-    <p class="endpoint"><code>POST https://email.hafihime.com/api/send-email</code></p>
-    <span class="status">Operational</span>
-    <footer>
-      Server-to-server API ·
-      <a href="https://github.com/hilzonlanin/hafihime-email">docs &amp; contract</a>
-    </footer>
+    <span class="status" id="status" role="status">
+      <span class="dot"></span><span id="status-text">Checking…</span>
+    </span>
+    <script>
+      (function () {
+        var el = document.getElementById('status');
+        var txt = document.getElementById('status-text');
+        // The function is POST-only: a tokenless POST answers 401 when the
+        // function runs (auth refuses before any validation), which is the
+        // proof of life. 404/5xx from the CDN or a network error = down.
+        function isAlive(status) {
+          return status === 400 || status === 401 || status === 405;
+        }
+        async function probe() {
+          var up = false;
+          try {
+            var r = await fetch('/api/send-email', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: '{}',
+              cache: 'no-store'
+            });
+            up = isAlive(r.status);
+          } catch (e) {
+            up = false;
+          }
+          el.classList.remove('up', 'down');
+          el.classList.add(up ? 'up' : 'down');
+          txt.textContent = up ? 'Operational' : 'Down';
+        }
+        probe();
+        // Re-check while the tab sits open — a function that dies (or comes
+        // back) after load must not leave a stale colour on screen.
+        setInterval(probe, 60000);
+      })();
+    </script>
   </body>
 </html>
