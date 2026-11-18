@@ -3,16 +3,89 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hafihime Email Service</title>
+    <title>Hafihime</title>
+    <meta name="description" content="Transactional email service for Hafihime web apps. Server-to-server only." />
+    <link rel="icon" href="favicon.ico" />
     <style>
-      body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 4rem auto; padding: 0 1rem; color: #1c1c1a; }
-      code { background: #f4f4f2; padding: 0.15rem 0.4rem; border-radius: 4px; }
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.25rem;
+        padding: 2rem 1.5rem;
+        font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: radial-gradient(ellipse at 50% 35%, #161b22 0%, #0d1117 70%);
+        color: #c9d1d9;
+        text-align: center;
+      }
+      .logo { width: 96px; height: 96px; }
+      h1 {
+        margin: 0;
+        font-size: 2.4rem;
+        font-weight: 650;
+        letter-spacing: 0.01em;
+        color: #f0f6fc;
+      }
+      .service {
+        margin: -0.5rem 0 0;
+        font-size: 1.05rem;
+        color: #e32228;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .tagline { margin: 0; max-width: 34rem; color: #8b949e; }
+      .endpoint {
+        margin: 0.5rem 0 0;
+        font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+        color: #8b949e;
+      }
+      .endpoint code { color: #3fb950; }
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.25rem;
+        font-size: 0.85rem;
+        color: #8b949e;
+      }
+      .status::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #3fb950;
+        box-shadow: 0 0 8px #3fb95088;
+      }
+      footer {
+        position: fixed;
+        bottom: 0;
+        padding: 1rem;
+        font-size: 0.8rem;
+        color: #484f58;
+      }
+      footer a { color: #8b949e; text-decoration: none; }
+      footer a:hover { color: #c9d1d9; text-decoration: underline; }
     </style>
   </head>
   <body>
-    <h1>Hafihime Email Service</h1>
-    <p>Transactional email microservice. Send mail by POSTing to
-      <code>/api/send-email</code> with a bearer token.</p>
-    <p>This service is used internally by hafihime web apps.</p>
+    <img class="logo" src="hafihime-logo.svg" alt="Hafihime logo" width="96" height="96" />
+    <h1>Hafihime</h1>
+    <p class="service">Email Service</p>
+    <p class="tagline">
+      Transactional email for Hafihime web apps — welcome, password reset,
+      purchase confirmation and contact replies — behind one authenticated endpoint.
+    </p>
+    <p class="endpoint"><code>POST https://email.hafihime.com/api/send-email</code></p>
+    <span class="status">Operational</span>
+    <footer>
+      Server-to-server API ·
+      <a href="https://github.com/hilzonlanin/hafihime-email">docs &amp; contract</a>
+    </footer>
   </body>
 </html>
