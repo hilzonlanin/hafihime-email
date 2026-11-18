@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "netlify dev",
     "build": "tsc",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "node --experimental-strip-types scripts/test-local.mts"
   },
   "engines": {
     "node": ">=20.0.0"
